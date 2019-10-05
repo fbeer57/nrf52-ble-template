@@ -1,0 +1,15 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"terminal.integrated.env.linux": {
+			"SDK_ROOT": "${workspaceFolder}/../../SDK"
+		},
+		"files.associations": {
+			"nrf_log.h": "c"
+		}
+	}
+}

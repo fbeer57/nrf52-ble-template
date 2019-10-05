@@ -1,0 +1,8 @@
+{
+    "terminal.integrated.env.linux": {
+        "SDK_ROOT": "${workspaceFolder}/../../SDK"
+    },
+    "files.associations": {
+        "stdbool.h": "c"
+    }
+}
