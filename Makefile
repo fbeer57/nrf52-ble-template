@@ -53,6 +53,7 @@ SRC_FILES += $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_uart.c
 SRC_FILES += $(SDK_ROOT)/modules/nrfx/drivers/src/nrfx_uarte.c
 SRC_FILES += $(SDK_ROOT)/components/libraries/bsp/bsp.c
 SRC_FILES += $(SDK_ROOT)/components/libraries/bsp/bsp_btn_ble.c
+SRC_FILES += $(wildcard $(PROJ_DIR)/src/ble/*.c)
 SRC_FILES += $(wildcard $(PROJ_DIR)/src/*.c)
 # SRC_FILES += $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT.c
 # SRC_FILES += $(SDK_ROOT)/external/segger_rtt/SEGGER_RTT_Syscalls_GCC.c
