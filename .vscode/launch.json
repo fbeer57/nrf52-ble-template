@@ -4,66 +4,18 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-
         {
-            "name": "(gdb) Launch",
-            "type": "cppdbg",
+            "cwd": "${workspaceRoot}",
+            "executable": "${workspaceFolder}/_build/nrf52832_xxaa.out",
+            "name": "nrf52",
             "request": "launch",
-            "program": "${workspaceFolder}/_build/nrf52832_xxaa.out",
-            "args": [],
-            "stopAtEntry": true,
-            "cwd": "${workspaceFolder}",
-            "environment": [],
-            "externalConsole": false,
-            "MIMode": "gdb",
-            "miDebuggerPath": "${workspaceFolder}/../../toolchain/bin/arm-none-eabi-gdb",
-            "miDebuggerServerAddress": "localhost:3333",
-            "serverLaunchTimeout": 60000,
-            "debugServerPath": "/bin/openocd",
-            "debugServerArgs": "-f /home/felix/mcu/nrf52/openocd_nrf52-stlink.cfg -c init -c \"reset init\"",
-            "serverStarted": "target halted due to debug-request, current mode: Thread",
-            "filterStderr": true,
-            "filterStdout": false,
-            "setupCommands": [
-                { 
-                    "text": "-target-select remote localhost:3333", 
-                    "description": "connect to target", 
-                    "ignoreFailures": false 
-                },
-                { 
-                    "text": "-file-exec-and-symbols ${workspaceFolder}/_build/nrf52832_xxaa.out", 
-                    "description": "load file", 
-                    "ignoreFailures": false
-                },
-                { 
-                    "text": "-interpreter-exec console \"monitor endian little\"", 
-                    "ignoreFailures": false 
-                },
-                { 
-                    "text": "-interpreter-exec console \"monitor reset\"", 
-                    "ignoreFailures": false 
-                },
-                { 
-                    "text": "-interpreter-exec console \"monitor halt\"", 
-                    "ignoreFailures": false 
-                },
-                { 
-                    "text": "-interpreter-exec console \"monitor arm semihosting enable\"", 
-                    "ignoreFailures": false 
-                },
-                { 
-                    "text": "-target-download", 
-                    "description": "flash target", 
-                    "ignoreFailures": false 
-                }
-            ],
-            "logging": {
-                "moduleLoad": true,
-                "trace": true,
-                "engineLogging": true,
-                "programOutput": true,
-                "exceptions": true
-            }
+            "type": "cortex-debug",
+            "servertype": "openocd",
+            "armToolchainPath": "${workspaceFolder}/../../toolchain/bin",
+            "device": "nrf52832",
+            "configFiles": [
+                "/home/felix/mcu/nrf52/openocd_nrf52-stlink.cfg"
+            ]
         }
     ]
 }
