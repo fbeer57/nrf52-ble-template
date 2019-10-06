@@ -51,6 +51,28 @@
 #include <stdint.h>
 #include <string.h>
 
+#include "nordic_common.h"
+#include "nrf.h"
+#include "app_error.h"
+#include "ble.h"
+#include "ble_hci.h"
+#include "ble_srv_common.h"
+#include "ble_advdata.h"
+#include "ble_advertising.h"
+#include "ble_conn_params.h"
+#include "nrf_sdh.h"
+#include "nrf_sdh_soc.h"
+#include "nrf_sdh_ble.h"
+#include "app_timer.h"
+#include "peer_manager.h"
+#include "peer_manager_handler.h"
+#include "bsp_btn_ble.h"
+#include "ble_conn_state.h"
+#include "nrf_ble_gatt.h"
+#include "nrf_ble_qwr.h"
+
+#include "nrf_log.h"
+
 #include "ble_stack.h"
 
 NRF_BLE_GATT_DEF(m_gatt);                                                       /**< GATT module instance. */
@@ -474,11 +496,25 @@ void advertising_start(bool erase_bonds)
  */
 void advertising_restart_without_whitelist(void)
 {
-    ret_code_t  err_code = ble_advertising_restart_without_whitelist(&m_advertising);
+    if (m_conn_handle == BLE_CONN_HANDLE_INVALID)
+    {
+        ret_code_t err_code = ble_advertising_restart_without_whitelist(&m_advertising);
+        if (err_code != NRF_ERROR_INVALID_STATE)
+        {
+            APP_ERROR_CHECK(err_code);
+        }
+    }
+}
+
+void ble_gap_disconnect(void)
+{
+    ret_code_t err_code = sd_ble_gap_disconnect(m_conn_handle,
+                                                BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
     if (err_code != NRF_ERROR_INVALID_STATE)
     {
         APP_ERROR_CHECK(err_code);
     }
+
 }
 
 /**

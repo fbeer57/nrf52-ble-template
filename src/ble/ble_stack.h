@@ -50,38 +50,11 @@
  * It can easily be used as a starting point for creating a new application, the comments identified
  * with 'YOUR_JOB' indicates where and how you can customize.
  */
+#ifndef BLE_STACK_H
+#define BLE_STACK_H 1
 
-#include <stdbool.h>
-#include <stdint.h>
-#include <string.h>
-
-#include "nordic_common.h"
-#include "nrf.h"
 #include "app_error.h"
-#include "ble.h"
-#include "ble_hci.h"
-#include "ble_srv_common.h"
-#include "ble_advdata.h"
-#include "ble_advertising.h"
-#include "ble_conn_params.h"
-#include "nrf_sdh.h"
-#include "nrf_sdh_soc.h"
-#include "nrf_sdh_ble.h"
 #include "app_timer.h"
-#include "fds.h"
-#include "peer_manager.h"
-#include "peer_manager_handler.h"
-#include "bsp_btn_ble.h"
-#include "sensorsim.h"
-#include "ble_conn_state.h"
-#include "nrf_ble_gatt.h"
-#include "nrf_ble_qwr.h"
-#include "nrf_pwr_mgmt.h"
-
-#include "nrf_log.h"
-#include "nrf_log_ctrl.h"
-#include "nrf_log_default_backends.h"
-
 
 #define DEVICE_NAME                     "Nordic_Template"                       /**< Name of device. Will be included in the advertising data. */
 #define MANUFACTURER_NAME               "NordicSemiconductor"                   /**< Manufacturer. Will be passed to Device Information Service. */
@@ -109,11 +82,9 @@
 #define SEC_PARAM_MIN_KEY_SIZE          7                                       /**< Minimum encryption key size. */
 #define SEC_PARAM_MAX_KEY_SIZE          16                                      /**< Maximum encryption key size. */
 
-#define DEAD_BEEF                       0xDEADBEEF                              /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
-
-extern uint16_t m_conn_handle;                                                  /**< Handle of the current connection. */
-extern ble_uuid_t m_adv_uuids[];
-
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 extern void gap_params_init(void);
 extern void gatt_init(void);
@@ -125,7 +96,13 @@ extern void advertising_init(void);
 extern void advertising_start(bool erase_bonds);
 extern void advertising_restart_without_whitelist(void);
 extern void sleep_mode_enter(void);
+extern void ble_gap_disconnect(void);
 
+#ifdef __cplusplus
+}
+#endif
+
+#endif
 /**
  * @}
  */
