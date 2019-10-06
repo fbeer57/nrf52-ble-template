@@ -1,3 +1,5 @@
 _build/
 .directory
 .vscode/ipch/
+.vscode/.cortex-debug.*
+
