@@ -12,7 +12,8 @@
             "type": "cortex-debug",
             "servertype": "openocd",
             "armToolchainPath": "${workspaceFolder}/../../toolchain/bin",
-            "device": "nrf52832",
+            "device": "nrf52",
+            "svdFile": "${workspaceFolder}/../common/nrf52.svd",
             "configFiles": [
                 "/home/felix/mcu/nrf52/openocd_nrf52-stlink.cfg"
             ]
