@@ -81,6 +81,8 @@ SRC_FILES += $(SDK_ROOT)/components/ble/peer_manager/security_manager.c
 SRC_FILES += $(SDK_ROOT)/components/softdevice/common/nrf_sdh.c
 SRC_FILES += $(SDK_ROOT)/components/softdevice/common/nrf_sdh_ble.c
 SRC_FILES += $(SDK_ROOT)/components/softdevice/common/nrf_sdh_soc.c
+SRC_FILES += $(SDK_ROOT)/components/ble/ble_services/ble_nus/ble_nus.c
+SRC_FILES += $(SDK_ROOT)/components/ble/ble_link_ctx_manager/ble_link_ctx_manager.c
 
 # Include folders common to all targets
 INC_FOLDERS += \
@@ -170,6 +172,7 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/nfc/ndef/parser/record \
   $(SDK_ROOT)/modules/nrfx/mdk \
   $(SDK_ROOT)/components/ble/ble_services/ble_cts_c \
+  $(SDK_ROOT)/components/ble/ble_link_ctx_manager \
   $(SDK_ROOT)/components/ble/ble_services/ble_nus \
   $(SDK_ROOT)/components/libraries/twi_mngr \
   $(SDK_ROOT)/components/ble/ble_services/ble_hids \
@@ -219,6 +222,7 @@ LIB_FILES += \
 
 # Optimization flags
 OPT = -O3 -g3
+# OPT = -O0 -g
 # Uncomment the line below to enable link time optimization
 #OPT += -flto
 

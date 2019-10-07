@@ -66,6 +66,8 @@
 #include "nrf_log_ctrl.h"
 #include "nrf_log_default_backends.h"
 
+#include "task_manager.h"
+
 #include "ble/ble_stack.h"
 
 #define DEAD_BEEF                       0xDEADBEEF                              /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
@@ -233,10 +235,10 @@ int main(void)
     ble_stack_init();
     gap_params_init();
     gatt_init();
-    advertising_init();
     services_init();
     conn_params_init();
     peer_manager_init();
+    advertising_init();
 
     // Start execution.
     NRF_LOG_INFO("Template example started.");
