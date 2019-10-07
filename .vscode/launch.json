@@ -14,6 +14,7 @@
             "armToolchainPath": "${workspaceFolder}/../../toolchain/bin",
             "device": "nrf52",
             "svdFile": "${workspaceFolder}/../common/nrf52.svd",
+            "runToMain": true,
             "configFiles": [
                 "/home/felix/mcu/nrf52/openocd_nrf52-stlink.cfg"
             ]
