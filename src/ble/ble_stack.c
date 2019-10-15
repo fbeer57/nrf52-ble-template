@@ -75,6 +75,7 @@
 #include "nrf_log.h"
 
 #include "ble_stack.h"
+#include "main.h"
 
 NRF_BLE_GATT_DEF(m_gatt);                                                       /**< GATT module instance. */
 NRF_BLE_QWR_DEF(m_qwr);                                                         /**< Context for the Queued Write module.*/
@@ -105,13 +106,33 @@ static void nus_data_handler(ble_nus_evt_t * p_evt)
 {
     if (p_evt->type == BLE_NUS_EVT_RX_DATA)
     {
-        NRF_LOG_HEXDUMP_INFO(p_evt->params.rx_data.p_data, p_evt->params.rx_data.length)
-        uint32_t err_code;
-        do 
+        uint16_t length = p_evt->params.rx_data.length;
+        stream_put(&m_rxs, p_evt->params.rx_data.p_data, &length);
+        if (length < p_evt->params.rx_data.length)
         {
-            err_code = ble_nus_data_send(&m_nus, (uint8_t*)p_evt->params.rx_data.p_data, &p_evt->params.rx_data.length, m_conn_handle);
-        } while (err_code == NRF_ERROR_BUSY || err_code == NRF_ERROR_RESOURCES);
+            NRF_LOG_INFO("BLE RX overrun");
+        }
     }
+}
+
+ret_code_t ble_put(uint8_t *data, size_t* plength)
+{
+    uint16_t len = *plength;
+    ret_code_t error_code = NRF_SUCCESS;
+    if (len > 0)
+    {
+        error_code = ble_nus_data_send(&m_nus, data, &len, m_conn_handle);
+        if (error_code == NRF_SUCCESS)
+        {
+            *plength = len;
+        }
+    }
+    return error_code;
+}
+
+bool ble_is_connected(void)
+{
+    return (m_conn_handle != BLE_CONN_HANDLE_INVALID);
 }
 
 /**@brief Function for handling Peer Manager events.
@@ -359,6 +380,7 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
     {
         case BLE_GAP_EVT_DISCONNECTED:
             NRF_LOG_INFO("Disconnected.");
+            m_conn_handle = BLE_CONN_HANDLE_INVALID;
             // LED indication will be changed when advertising starts.
             break;
 
@@ -399,6 +421,13 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
             APP_ERROR_CHECK(err_code);
             break;
 
+        case BLE_GATTS_EVT_HVN_TX_COMPLETE:
+            // ready to send next package
+            if (!stream_empty(&m_txs))
+            {
+                stream_consume(&m_txs, ble_put, NUS_PACKET_LEN);
+            }
+            break;
         default:
             // No implementation needed.
             break;

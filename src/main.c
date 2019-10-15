@@ -66,11 +66,15 @@
 #include "nrf_log_ctrl.h"
 #include "nrf_log_default_backends.h"
 
-#include "task_manager.h"
-
 #include "ble/ble_stack.h"
 
+#include "stream.h"
+#include "main.h"
+
 #define DEAD_BEEF                       0xDEADBEEF                              /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
+
+STREAM_DEF(m_txs, 64);
+STREAM_DEF(m_rxs, 64);
 
 /**@brief Callback function for asserts in the SoftDevice.
  *
@@ -208,12 +212,38 @@ static void power_management_init(void)
 }
 
 
+ret_code_t consume_rx(uint8_t* p_data, size_t* p_len)
+{
+    if (*p_len > 0)
+    {
+        NRF_LOG_HEXDUMP_INFO(p_data, *p_len);
+    }
+    return NRF_SUCCESS;
+}
+
 /**@brief Function for handling the idle state (main loop).
  *
  * @details If there is no pending log operation, then sleep until next the next event occurs.
  */
 static void idle_state_handle(void)
 {
+    if (ble_is_connected())
+    {
+        static int i = 0;
+        // initiate sending packets
+        if (i % 10 == 0)
+        {
+            stream_puts(&m_txs, "Hello!");
+            NRF_LOG_INFO("Sent Hello");
+        }
+        if (!stream_empty(&m_txs))
+        {
+            stream_consume(&m_txs, ble_put, NUS_PACKET_LEN);
+            NRF_LOG_INFO("started tx");
+        }
+        stream_consume(&m_rxs, consume_rx, 64);
+        ++i;
+    }
     if (NRF_LOG_PROCESS() == false)
     {
         nrf_pwr_mgmt_run();
@@ -239,6 +269,8 @@ int main(void)
     conn_params_init();
     peer_manager_init();
     advertising_init();
+    stream_init(&m_rxs);
+    stream_init(&m_txs);
 
     // Start execution.
     NRF_LOG_INFO("Template example started.");

@@ -9,7 +9,8 @@
 			"SDK_ROOT": "${workspaceFolder}/../../SDK"
 		},
 		"files.associations": {
-			"nrf_log.h": "c"
+			"nrf_log.h": "c",
+			"system_error": "cpp"
 		}
 	}
 }

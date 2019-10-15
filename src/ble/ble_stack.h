@@ -99,6 +99,11 @@ extern void advertising_restart_without_whitelist(void);
 extern void sleep_mode_enter(void);
 extern void ble_gap_disconnect(void);
 
+extern bool ble_is_connected(void);
+
+extern ret_code_t ble_put(uint8_t *pdata, size_t *length);
+
+
 #ifdef __cplusplus
 }
 #endif

@@ -20,6 +20,7 @@ SRC_FILES += $(SDK_ROOT)/components/libraries/button/app_button.c
 SRC_FILES += $(SDK_ROOT)/components/libraries/util/app_error.c
 SRC_FILES += $(SDK_ROOT)/components/libraries/util/app_error_handler_gcc.c
 SRC_FILES += $(SDK_ROOT)/components/libraries/util/app_error_weak.c
+SRC_FILES += $(SDK_ROOT)/components/libraries/fifo/app_fifo.c
 # SRC_FILES += $(SDK_ROOT)/components/libraries/scheduler/app_scheduler.c
 SRC_FILES += $(SDK_ROOT)/components/libraries/timer/app_timer.c
 SRC_FILES += $(SDK_ROOT)/components/libraries/util/app_util_platform.c
@@ -154,6 +155,7 @@ INC_FOLDERS += \
   $(SDK_ROOT)/components/nfc/t4t_parser/apdu \
   $(SDK_ROOT)/components/libraries/util \
   ./config \
+  $(PROJ_DIR)/src \
   $(SDK_ROOT)/components/libraries/usbd/class/cdc \
   $(SDK_ROOT)/components/libraries/csense \
   $(SDK_ROOT)/components/libraries/balloc \
@@ -221,10 +223,10 @@ INC_FOLDERS += \
 LIB_FILES += \
 
 # Optimization flags
-OPT = -O3 -g3
-# OPT = -O0 -g
+# OPT = -O3 -g3
+OPT = -O0 -g
 # Uncomment the line below to enable link time optimization
-#OPT += -flto
+# OPT += -flto
 
 # C flags common to all targets
 CFLAGS += $(OPT)
