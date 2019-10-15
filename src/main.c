@@ -234,13 +234,12 @@ static void idle_state_handle(void)
         if (i % 10 == 0)
         {
             stream_puts(&m_txs, "Hello!");
-            NRF_LOG_INFO("Sent Hello");
         }
         if (!stream_empty(&m_txs))
         {
             stream_consume(&m_txs, ble_put, NUS_PACKET_LEN);
         }
-        stream_consume(&m_rxs, consume_rx, 64);
+        stream_consume(&m_rxs, consume_rx, 128);
         ++i;
     }
     if (NRF_LOG_PROCESS() == false)

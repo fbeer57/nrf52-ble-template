@@ -83,16 +83,8 @@ uint16_t stream_capacity(const stream_t* p_strm)
 
 uint16_t stream_available(const stream_t* p_strm)
 {
-    nrf_ringbuf_t *p = (nrf_ringbuf_t *)p_strm->p_context;
-    if (p->p_cb->tmp_wr_idx - p->p_cb->rd_idx == p->bufsize_mask + 1)
-    {
-        return 0;
-    }
-    uint32_t wr_idx = p->p_cb->tmp_wr_idx & p->bufsize_mask;
-    uint32_t rd_idx = p->p_cb->rd_idx & p->bufsize_mask;
-    return (wr_idx >= rd_idx)
-                ? p->bufsize_mask + 1 - wr_idx
-                : p->p_cb->rd_idx - (p->p_cb->tmp_wr_idx - (p->bufsize_mask + 1));
+    nrf_ringbuf_cb_t *p_cb = ((nrf_ringbuf_t *)p_strm->p_context)->p_cb;
+    return (p_cb->wr_idx - p_cb->tmp_rd_idx);
 }
 
 bool stream_full(const stream_t *p_strm)
@@ -103,8 +95,8 @@ bool stream_full(const stream_t *p_strm)
 
 bool stream_empty(const stream_t *p_strm)
 {
-    nrf_ringbuf_t *p = (nrf_ringbuf_t *)p_strm->p_context;
-    return (p->p_cb->tmp_wr_idx == p->p_cb->rd_idx);
+    nrf_ringbuf_cb_t *p_cb = ((nrf_ringbuf_t *)p_strm->p_context)->p_cb;
+    return (p_cb->tmp_wr_idx == p_cb->rd_idx);
 }
 
 ret_code_t stream_putc(stream_t *p_strm, char c)
