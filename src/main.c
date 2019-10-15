@@ -73,8 +73,8 @@
 
 #define DEAD_BEEF                       0xDEADBEEF                              /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
-STREAM_DEF(m_txs, 64);
-STREAM_DEF(m_rxs, 64);
+STREAM_DEF(m_txs,  64);
+STREAM_DEF(m_rxs, 128);
 
 /**@brief Callback function for asserts in the SoftDevice.
  *
@@ -239,7 +239,6 @@ static void idle_state_handle(void)
         if (!stream_empty(&m_txs))
         {
             stream_consume(&m_txs, ble_put, NUS_PACKET_LEN);
-            NRF_LOG_INFO("started tx");
         }
         stream_consume(&m_rxs, consume_rx, 64);
         ++i;
